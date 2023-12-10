@@ -35,7 +35,7 @@ const loadStateFromLocalStorage = (): State | undefined => {
     const serializedState = localStorage.getItem("appState");
     return serializedState
       ? JSON.parse(serializedState)
-      : { notes: [], tagsVisibility: null };
+      : { notes: [], tagsVisibility: {} };
   } catch (err) {
     console.error("Error loading state from localStorage:", err);
     return undefined;

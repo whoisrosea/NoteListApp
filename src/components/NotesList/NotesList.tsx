@@ -26,15 +26,14 @@ const NotesList = () => {
   };
 
   const dispatch = useDispatch();
-  //TODO: use plural form
-  //TODO: change variable naming
+  
+  
   const notes: State["notes"] = useSelector((state: State) => state.notes);
   const [visibility, setVisibility] = useState(false);
   const [editInput, setEditInput] = useState("");
   const [inputTags, setInputTags] = useState<string[]>([]);
-  //TODO: make constants in separate file
-  //retrieve tags from store
-  const tagRegex = /#(\w+)/g;
+  const tagRegex = /#(\w+)/g
+  ;
 
   const editInputHandler = (e) => {
     setEditInput(e.target.value);
@@ -47,28 +46,31 @@ const NotesList = () => {
         (note) => note.id !== deletenote.id && note.tags.includes(tagToDelete)
       );
 
-      // If the tag is not used in other notes, delete it
+
       if (!isTagUsedInOtherNotes) {
-        //TODO: fix naming
+
         dispatch(deletetagAction({ tag: tagToDelete }));
       }
     });
 
-    // Delete the note
+
     dispatch(deleteNoteAction(deletenote));
   };
 
   return (
     <Grid direction={"column"} justifyContent={"center"} container>
       {notes.map((note) => (
-        //TODO: get rid of divs. use mui instead
+
 
         <Grid
           container
           key={note.id}
-          border={"inset"}
+          boxShadow="0px 5px 10px 2px rgba(34, 60, 80, 0.1)"
           display={note.visibility ? "flex" : "none"}
           direction={"row"}
+          width={600}
+          padding={2}
+          margin={2}
         >
           <Grid item>note: {note.title}</Grid>
           <Grid display={"flex"} direction={"row"} item>

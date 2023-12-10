@@ -9,6 +9,8 @@ const TagSelector: React.FC = () => {
     (state: State) => state.tagsVisibility
   );
 
+  console.log("TAGS", tagsVisibility);
+
   const tags: Set<string> = new Set(Object.keys(tagsVisibility));
 
   const dispatch = useDispatch();
@@ -28,14 +30,22 @@ const TagSelector: React.FC = () => {
   );
 
   return (
-    <Grid container display={"flex"} direction={"column"} alignItems={"center"}>
+    <Grid
+      container
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+    >
       <Button
         onClick={() => dispatch(showAllNotesAction())}
         variant={areAllTagsVisible ? "contained" : "outlined"}
       >
         Show All
       </Button>
-      <Grid item display={"flex"} direction={"row"}
+      <Grid
+        item
+        display={"flex"}
+        direction={"row"}
         style={{
           display: "flex",
           flexWrap: "wrap",
