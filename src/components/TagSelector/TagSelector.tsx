@@ -9,7 +9,7 @@ const TagSelector: React.FC = () => {
     (state: State) => state.tagsVisibility
   );
 
-  console.log("TAGS", tagsVisibility);
+
 
   const tags: Set<string> = new Set(Object.keys(tagsVisibility));
 

@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import "./App.css";
 import AddNoteForm from "./components/AddNoteForm/AddNoteForm";
 import NotesList from "./components/NotesList/NotesList";
 import TagSelector from "./components/TagSelector/TagSelector";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useSelector } from "react-redux";
 import { Notes } from "./interfaces";
-import { Modal, Grid, Box } from "@mui/material";
+import { Modal, Grid, IconButton } from "@mui/material";
 
 function App() {
   const [open, setOpen] = useState(false);
   const notes = useSelector((state: { notes: Notes[] }) => state.notes);
-  console.log("NOTES", notes);
 
   const style = {
     position: "absolute",
@@ -26,12 +24,7 @@ function App() {
   };
 
   return (
-    <Grid
-      container
-      height="100vh" 
-      justifyContent="center"
-      alignItems="center" 
-    >
+    <Grid container height="100vh" justifyContent="center" alignItems="center">
       <Grid
         container
         padding={"20px"}
@@ -49,17 +42,15 @@ function App() {
           <NotesList />
         </Grid>
         <Grid item>
-          <AddCircleOutlineIcon
-            sx={{ fontSize: 100 }}
-            color="primary"
-            onClick={() => setOpen(true)}
-          />
+          <IconButton onClick={() => setOpen(true)}>
+            <AddCircleOutlineIcon sx={{ fontSize: 100 }} color="primary" />
+          </IconButton>
         </Grid>
 
         <Modal open={open} onClose={() => setOpen(false)}>
-          <Box sx={style}>
+          <Grid sx={style}>
             <AddNoteForm setOpen={setOpen} />
-          </Box>
+          </Grid>
         </Modal>
       </Grid>
     </Grid>

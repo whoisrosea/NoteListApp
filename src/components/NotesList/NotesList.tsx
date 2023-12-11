@@ -9,8 +9,8 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Notes, State } from "../../interfaces";
-import { Modal, TextField } from "@mui/material";
-
+import { Modal, TextField, IconButton } from "@mui/material";
+import { useInput } from "../../hooks/useInput";
 
 const NotesList = () => {
   const style = {
@@ -24,45 +24,28 @@ const NotesList = () => {
     p: 4,
     borderRadius: 3,
   };
-
   const dispatch = useDispatch();
-  
-  
   const notes: State["notes"] = useSelector((state: State) => state.notes);
   const [visibility, setVisibility] = useState(false);
-  const [editInput, setEditInput] = useState("");
-  const [inputTags, setInputTags] = useState<string[]>([]);
-  const tagRegex = /#(\w+)/g
-  ;
-
-  const editInputHandler = (e) => {
-    setEditInput(e.target.value);
-    setInputTags(e.target.value.match(tagRegex) || []);
-  };
-
+  const input = useInput("");
   const deleteHandler = (deletenote: Notes) => {
     deletenote.tags?.forEach((tagToDelete) => {
       const isTagUsedInOtherNotes = notes.some(
         (note) => note.id !== deletenote.id && note.tags.includes(tagToDelete)
       );
-
-
       if (!isTagUsedInOtherNotes) {
-
         dispatch(deletetagAction({ tag: tagToDelete }));
       }
     });
-
-
     dispatch(deleteNoteAction(deletenote));
   };
 
   return (
-    <Grid direction={"column"} justifyContent={"center"} container>
+    <Grid justifyContent={"center"} container>
       {notes.map((note) => (
-
-
         <Grid
+          justifyContent={"space-around"}
+          alignItems={"center"}
           container
           key={note.id}
           boxShadow="0px 5px 10px 2px rgba(34, 60, 80, 0.1)"
@@ -73,38 +56,55 @@ const NotesList = () => {
           margin={2}
         >
           <Grid item>note: {note.title}</Grid>
-          <Grid display={"flex"} direction={"row"} item>
-            tags:{" "}
-            {note.tags?.map((tag, index) => (
-              <Grid item key={index}>
-                {" "}
-                {tag}
-              </Grid>
-            ))}
+          {note.tags.length > 0 && (
+            <Grid display={"flex"} direction={"row"} item>
+              tags:{" "}
+              {note.tags.map((tag, index) => (
+                <Grid item key={index}>
+                  {tag}
+                </Grid>
+              ))}
+            </Grid>
+          )}
+
+          <Grid item>
+            <IconButton
+              onClick={() => {
+                input.setValue(note.title);
+                setVisibility(true);
+              }}
+            >
+              <EditIcon color="primary" />
+            </IconButton>
+            <IconButton onClick={() => deleteHandler(note)}>
+              <DeleteIcon color="primary" />
+            </IconButton>
           </Grid>
 
-          <Grid container>
-            <EditIcon color="primary" onClick={() => setVisibility(true)} />
-
-            <DeleteIcon color="primary" onClick={() => deleteHandler(note)} />
-          </Grid>
-
-          <Modal open={visibility} onClose={() => setVisibility(false)}>
-            <Grid sx={style}>
+          <Modal
+            open={visibility}
+            onClose={() => {
+              input.setValue("");
+              setVisibility(false);
+            }}
+          >
+            <Grid container sx={style}>
               <TextField
                 id="standard-basic"
                 variant="standard"
-                value={editInput}
-                onChange={editInputHandler}
-              ></TextField>
+                value={input.value}
+                placeholder="Enter edit note"
+                onChange={(e) => input.onChange(e)}
+              />
               <Button
+                disabled={input.error}
                 onClick={() => {
                   setVisibility(false);
                   dispatch(
                     editNoteAction({
                       id: note.id,
-                      editInput,
-                      inputTags,
+                      editInput: input.value,
+                      inputTags: input.tags,
                       noteTags: note.tags,
                     })
                   );

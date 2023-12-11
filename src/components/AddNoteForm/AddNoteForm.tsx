@@ -1,17 +1,11 @@
 import { Button, Grid, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { addNoteAction } from "../../actions/actions";
+import { useInput } from "../../hooks/useInput";
 
 const AddNoteForm = ({ setOpen }) => {
-  const [inputValue, setInputValue] = useState("");
-  const [inputTags, setInputTags] = useState<string[]>([]);
-  const tagRegex = /#(\w+)/g;
-
-  const inputHandler = (e) => {
-    setInputValue(e.target.value);
-    setInputTags(e.target.value.match(tagRegex) || []);
-  };
+  const input = useInput("")
 
   const dispatch = useDispatch();
 
@@ -19,13 +13,12 @@ const AddNoteForm = ({ setOpen }) => {
     const id = Date.now().toString();
     dispatch(
       addNoteAction({
-        title: inputValue,
+        title: input.value,
         id,
-        tags: inputTags,
+        tags: input.tags,
         visibility: true,
       })
     );
-    setInputValue("");
     setOpen(false);
   };
 
@@ -35,14 +28,14 @@ const AddNoteForm = ({ setOpen }) => {
         <Grid item>
           <TextField
             placeholder="Enter your note"
-            value={inputValue}
-            onChange={inputHandler}
+            value={input.value}
+            onChange={e => input.onChange(e)}
             id="standard-basic"
             variant="standard"
           />
         </Grid>
         <Grid item>
-          <Button variant="contained" onClick={addHandler}>
+          <Button disabled={input.error} variant="contained" onClick={addHandler}>
             Create
           </Button>
         </Grid>
