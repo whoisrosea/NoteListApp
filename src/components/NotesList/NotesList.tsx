@@ -40,6 +40,27 @@ const NotesList = () => {
     dispatch(deleteNoteAction(deletenote));
   };
 
+  const highlightTagsInTitle = (title, tags) => {
+    
+    const tagRegex = new RegExp(`(${tags.join('|')})`, 'gi');
+  
+    
+    const titleParts = title.split(tagRegex);
+  
+    
+    return titleParts.map((part, index) => (
+      tags.includes(part.toLowerCase()) ? (
+        <span key={index} style={{ fontWeight: 'bold', color: 'green' }}>
+          {part}
+        </span>
+      ) : (
+        <span key={index}>
+          {part}
+        </span>
+      )
+    ));
+  };
+
   return (
     <Grid justifyContent={"center"} container>
       {notes.map((note) => (
@@ -55,10 +76,10 @@ const NotesList = () => {
           padding={2}
           margin={2}
         >
-          <Grid item>note: {note.title}</Grid>
+          <Grid item>note: {highlightTagsInTitle(note.title, note.tags)}</Grid>
           {note.tags.length > 0 && (
             <Grid display={"flex"} direction={"row"} item>
-              tags:{" "}
+              tags:
               {note.tags.map((tag, index) => (
                 <Grid item key={index}>
                   {tag}
