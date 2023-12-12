@@ -28,8 +28,8 @@ function App() {
       <Grid
         container
         padding={"20px"}
-        width={700}
-        height={800}
+        width={500}
+        height={600}
         boxShadow="0px 5px 10px 2px rgba(34, 60, 80, 0.2)"
         display={"flex"}
         direction={"column"}

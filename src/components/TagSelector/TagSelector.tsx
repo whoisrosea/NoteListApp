@@ -43,7 +43,7 @@ const TagSelector: React.FC = () => {
         Show All
       </Button>
       <Grid
-        item
+        container
         display={"flex"}
         direction={"row"}
         style={{

@@ -51,7 +51,7 @@ const NotesList = () => {
           boxShadow="0px 5px 10px 2px rgba(34, 60, 80, 0.1)"
           display={note.visibility ? "flex" : "none"}
           direction={"row"}
-          width={600}
+          width={400}
           padding={2}
           margin={2}
         >
